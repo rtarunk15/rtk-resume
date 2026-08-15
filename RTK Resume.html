@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RTK Resume</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:wght@400;700&family=Work+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0F0E0C;
+    --bg-alt:#171310;
+    --card:#1D1810;
+    --gold:#E8B34C;
+    --red:#C23B32;
+    --cream:#F3EFE6;
+    --muted:#958D7C;
+    --line:rgba(243,239,230,0.12);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--cream);
+    font-family:'Work Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:64px;
+  }
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+  }
+
+  a{color:inherit;}
+  ::selection{background:var(--gold); color:var(--bg);}
+
+  .mono{font-family:'Space Mono', monospace;}
+  .display{font-family:'Anton', sans-serif; font-weight:400; letter-spacing:0.01em;}
+
+  /* ---------- layout shell ---------- */
+  .wrap{max-width:920px; margin:0 auto; padding:0 28px;}
+
+  .cue{
+    display:flex;
+    align-items:baseline;
+    gap:14px;
+    margin:0 0 34px 0;
+    color:var(--gold);
+  }
+  .cue .time{font-size:13px; letter-spacing:0.08em;}
+  .cue .rule{flex:1; height:1px; background:var(--line);}
+  .cue .label{font-size:12px; letter-spacing:0.22em; text-transform:uppercase; color:var(--muted);}
+
+  section{padding:76px 0;}
+  section + section{border-top:1px solid var(--line);}
+
+  h2{
+    font-family:'Anton', sans-serif;
+    font-weight:400;
+    font-size:clamp(28px, 4vw, 42px);
+    letter-spacing:0.01em;
+    margin:0 0 28px 0;
+    color:var(--cream);
+  }
+
+  /* ---------- hero ---------- */
+  .hero{
+    position:relative;
+    min-height:100svh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding:120px 0 60px;
+    overflow:hidden;
+    border-top:none;
+  }
+  .hero::before{
+    content:"";
+    position:absolute;
+    inset:-20%;
+    background:radial-gradient(circle at 50% 32%, rgba(232,179,76,0.16), transparent 55%),
+               radial-gradient(circle at 80% 80%, rgba(194,59,50,0.10), transparent 50%);
+    pointer-events:none;
+  }
+  .onair{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:6px 12px;
+    border:1px solid var(--red);
+    border-radius:2px;
+    width:fit-content;
+    margin-bottom:28px;
+    font-size:11px;
+    letter-spacing:0.2em;
+    color:var(--red);
+  }
+  .onair .dot{
+    width:7px; height:7px; border-radius:50%;
+    background:var(--red);
+    animation:pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{opacity:1;}
+    50%{opacity:0.25;}
+  }
+
+  .hero-grid{
+    display:flex;
+    align-items:center;
+    gap:44px;
+    flex-wrap:wrap;
+    position:relative;
+  }
+  .photo-frame{
+    width:132px; height:132px;
+    flex-shrink:0;
+    border-radius:50%;
+    border:1.5px dashed rgba(232,179,76,0.5);
+    display:flex; align-items:center; justify-content:center;
+    position:relative;
+    background:radial-gradient(circle, rgba(232,179,76,0.10), transparent 70%);
+  }
+  .photo-frame img{
+    width:100%; height:100%; object-fit:cover; border-radius:50%;
+    display:none;
+  }
+  .photo-frame .initials{
+    font-family:'Anton', sans-serif;
+    font-size:34px;
+    color:var(--gold);
+    letter-spacing:0.03em;
+  }
+
+  .hero-name{
+    font-size:clamp(46px, 8.6vw, 96px);
+    line-height:0.94;
+    margin:0;
+    color:var(--cream);
+  }
+  .hero-name span{color:var(--gold);}
+
+  .hero-tags{
+    display:flex;
+    flex-wrap:wrap;
+    gap:0;
+    margin-top:18px;
+    font-size:13px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .hero-tags span:not(:last-child)::after{
+    content:"/";
+    margin:0 10px;
+    color:var(--gold);
+  }
+
+  .hero-contact{
+    margin-top:56px;
+    display:flex;
+    gap:28px;
+    flex-wrap:wrap;
+    font-family:'Space Mono', monospace;
+    font-size:12.5px;
+    color:var(--muted);
+  }
+  .hero-contact a{text-decoration:none; border-bottom:1px solid transparent;}
+  .hero-contact a:hover, .hero-contact a:focus-visible{color:var(--gold); border-bottom-color:var(--gold);}
+  .hero-contact .item{display:flex; align-items:center; gap:8px;}
+  .hero-contact svg{width:14px; height:14px; stroke:var(--gold); flex-shrink:0;}
+
+  .scroll-cue{
+    position:absolute;
+    bottom:36px; left:28px;
+    font-size:11px;
+    letter-spacing:0.2em;
+    color:var(--muted);
+    display:flex; align-items:center; gap:10px;
+  }
+  .scroll-cue::before{
+    content:"";
+    width:22px; height:1px;
+    background:var(--muted);
+  }
+
+  /* ---------- the pitch ---------- */
+  .pitch p{
+    font-size:clamp(19px, 2.4vw, 24px);
+    line-height:1.55;
+    color:var(--cream);
+    max-width:680px;
+    font-weight:300;
+  }
+
+  /* ---------- program / education ---------- */
+  .program-item{
+    display:grid;
+    grid-template-columns:120px 1fr;
+    gap:24px;
+    padding:22px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .program-item:last-child{border-bottom:none;}
+  .program-item .tag{
+    font-family:'Space Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.08em;
+    color:var(--gold);
+    text-transform:uppercase;
+    padding-top:3px;
+  }
+  .program-item h3{margin:0 0 6px 0; font-size:19px; font-weight:600; color:var(--cream);}
+  .program-item .sub{margin:0; color:var(--muted); font-size:14px;}
+  .program-item .score{
+    display:inline-block; margin-top:10px;
+    font-family:'Space Mono', monospace;
+    font-size:12px; color:var(--gold);
+    border:1px solid rgba(232,179,76,0.35);
+    padding:3px 9px; border-radius:2px;
+  }
+
+  /* ---------- backstage / internship ---------- */
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:28px 30px;
+  }
+  .card h3{margin:0 0 4px 0; font-size:20px; font-weight:600;}
+  .card .role-meta{
+    font-family:'Space Mono', monospace;
+    font-size:12px;
+    color:var(--muted);
+    margin-bottom:18px;
+  }
+  .card ul{margin:0; padding-left:20px; color:var(--cream); line-height:1.7; font-weight:300;}
+  .card ul li::marker{color:var(--gold);}
+
+  /* ---------- highlight reel / achievements ---------- */
+  .reel-item{
+    display:grid;
+    grid-template-columns:96px 1fr;
+    gap:24px;
+    padding:20px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .reel-item:last-child{border-bottom:none;}
+  .reel-item .date{
+    font-family:'Space Mono', monospace;
+    font-size:12px;
+    color:var(--gold);
+    padding-top:3px;
+  }
+  .reel-item p{margin:0; line-height:1.6; font-weight:300; color:var(--cream);}
+  .reel-item strong{color:var(--gold); font-weight:600;}
+
+  /* ---------- skills / chips ---------- */
+  .chips{display:flex; flex-wrap:wrap; gap:10px;}
+  .chip{
+    font-family:'Space Mono', monospace;
+    font-size:12.5px;
+    letter-spacing:0.03em;
+    padding:9px 16px;
+    border:1px solid var(--line);
+    border-radius:20px;
+    color:var(--cream);
+    background:var(--bg-alt);
+  }
+  .chip.accent{border-color:rgba(232,179,76,0.4); color:var(--gold);}
+
+  /* ---------- off stage / hobbies ---------- */
+  .offstage{display:grid; grid-template-columns:repeat(auto-fit, minmax(180px,1fr)); gap:16px;}
+  .offstage .item{
+    padding:22px 20px;
+    border:1px solid var(--line);
+    border-radius:4px;
+    background:var(--bg-alt);
+  }
+  .offstage .item span{
+    display:block;
+    font-family:'Space Mono', monospace;
+    font-size:11px;
+    color:var(--gold);
+    letter-spacing:0.1em;
+    margin-bottom:8px;
+  }
+
+  /* ---------- closing remarks / vision ---------- */
+  .closing{
+    position:relative;
+    padding-left:26px;
+    border-left:2px solid var(--gold);
+  }
+  .closing p{
+    font-family:'Anton', sans-serif;
+    font-weight:400;
+    font-size:clamp(24px, 3.4vw, 34px);
+    line-height:1.32;
+    color:var(--cream);
+    margin:0;
+  }
+  .closing .note{
+    margin-top:20px;
+    font-family:'Space Mono', monospace;
+    font-size:12px;
+    color:var(--muted);
+    letter-spacing:0.05em;
+  }
+
+  /* ---------- end of show / footer ---------- */
+  footer{
+    text-align:center;
+    padding:60px 0 20px;
+    color:var(--muted);
+    font-family:'Space Mono', monospace;
+    font-size:11.5px;
+    letter-spacing:0.15em;
+  }
+
+  /* ---------- lower third (fixed broadcast bar) ---------- */
+  .lower-third{
+    position:fixed;
+    left:0; right:0; bottom:0;
+    z-index:50;
+    display:flex;
+    align-items:stretch;
+    transform:translateY(100%);
+    transition:transform 0.4s ease;
+    font-family:'Space Mono', monospace;
+  }
+  .lower-third.show{transform:translateY(0);}
+  .lower-third .bar-gold{width:6px; background:var(--gold); flex-shrink:0;}
+  .lower-third .bar-main{
+    flex:1;
+    background:rgba(15,14,12,0.92);
+    backdrop-filter:blur(6px);
+    border-top:1px solid var(--line);
+    padding:10px 20px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .lower-third .who{font-size:12px; color:var(--cream); letter-spacing:0.04em;}
+  .lower-third .who b{color:var(--gold); font-family:'Anton',sans-serif; font-weight:400; letter-spacing:0.03em; margin-right:8px;}
+  .lower-third .lt-links{display:flex; gap:8px; flex-wrap:wrap;}
+  .lower-third a{
+    font-size:11px; color:var(--gold); text-decoration:none;
+    border:1px solid rgba(232,179,76,0.4);
+    padding:6px 12px; border-radius:2px;
+    white-space:nowrap;
+  }
+  .lower-third a:hover, .lower-third a:focus-visible{background:var(--gold); color:var(--bg);}
+
+  @media (max-width:640px){
+    .program-item, .reel-item{grid-template-columns:1fr;}
+    .program-item .tag, .reel-item .date{padding-top:0;}
+    .hero-grid{gap:26px;}
+    section{padding:56px 0;}
+  }
+
+  :focus-visible{outline:2px solid var(--gold); outline-offset:3px;}
+</style>
+</head>
+<body>
+
+<!-- ============ OPENING / HERO ============ -->
+<section class="hero" id="opening">
+  <div class="wrap">
+    <span class="onair"><span class="dot"></span>LIVE — RUN OF SHOW</span>
+
+    <div class="hero-grid">
+      <div class="photo-frame">
+        <img id="profile-photo" src="" alt="R Tarun Kumar">
+        <span class="initials">RTK</span>
+      </div>
+      <div>
+        <h1 class="hero-name display">R TARUN<br><span>KUMAR</span></h1>
+        <div class="hero-tags mono">
+          <span>Corporate BBA</span>
+          <span>Master of Ceremonies</span>
+          <span>Rotaractor</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-contact">
+      <span class="item">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        <a href="tel:+917090222261">+91 70902 22261</a>
+      </span>
+      <span class="item">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z" opacity="0"/><path d="M22 6l-10 7L2 6"/><path d="M2 6h20v12H2z"/></svg>
+        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=rtarunk15@gmail.com" target="_blank" rel="noopener noreferrer">rtarunk15@gmail.com</a>
+      </span>
+      <span class="item">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <span>Kaggalipura, Kanakapura Road, Bengaluru</span>
+      </span>
+      <span class="item">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        <a href="https://www.linkedin.com/in/r-tarun-kumar" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      </span>
+      <span class="item">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
+        <a href="https://www.instagram.com/_t4run.k_/" target="_blank" rel="noopener noreferrer">@_t4run.k_</a>
+      </span>
+    </div>
+  </div>
+
+  <div class="scroll-cue mono">SCROLL FOR RUNDOWN</div>
+</section>
+
+<!-- ============ THE PITCH ============ -->
+<section id="pitch">
+  <div class="wrap">
+    <div class="cue"><span class="time mono">00:03</span><span class="rule"></span><span class="label mono">The Pitch</span></div>
+    <div class="pitch">
+      <p>A motivated Corporate BBA student with strong leadership, communication, and event management skills — passionate about entrepreneurship, public speaking, and community service, and committed to learning, teamwork, and creating positive social impact.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ THE PROGRAM / EDUCATION ============ -->
+<section id="program">
+  <div class="wrap">
+    <div class="cue"><span class="time mono">00:08</span><span class="rule"></span><span class="label mono">The Program</span></div>
+    <h2>Education</h2>
+
+    <div class="program-item">
+      <div class="tag mono">Pursuing<br>2nd Year</div>
+      <div>
+        <h3>Bachelor of Business Administration (Corporate BBA)</h3>
+        <p class="sub">Jain College of Management Studies (CMS), Lalbagh, Bengaluru</p>
+      </div>
+    </div>
+
+    <div class="program-item">
+      <div class="tag mono">ISC<br>Class XII</div>
+      <div>
+        <h3>Golden Bee Global School</h3>
+        <span class="score">83.25%</span>
+      </div>
+    </div>
+
+    <div class="program-item">
+      <div class="tag mono">ICSE<br>Class X</div>
+      <div>
+        <h3>Sherwood High School</h3>
+        <span class="score">90.2%</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BACKSTAGE PASS / INTERNSHIP ============ -->
+<section id="backstage">
+  <div class="wrap">
+    <div class="cue"><span class="time mono">00:15</span><span class="rule"></span><span class="label mono">Backstage Pass</span></div>
+    <h2>Internship Experience</h2>
+
+    <div class="card">
+      <h3>Intern — Intellisol Integrated Services Pvt. Ltd.</h3>
+      <p class="role-meta">JUNE 2025 — JULY 2025</p>
+      <ul>
+        <li>Gained practical exposure to business operations and corporate work culture.</li>
+        <li>Assisted in day-to-day organizational activities and developed professional communication skills.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HIGHLIGHT REEL / ACHIEVEMENTS ============ -->
+<section id="highlights">
+  <div class="wrap">
+    <div class="cue"><span class="time mono">00:22</span><span class="rule"></span><span class="label mono">Highlight Reel</span></div>
+    <h2>Achievements</h2>
+
+    <div class="reel-item">
+      <div class="date">2025</div>
+      <p>Served as <strong>Master of Ceremonies</strong> for the 37th Installation Ceremony of Rotary Club of JP Nagar.</p>
+    </div>
+    <div class="reel-item">
+      <div class="date">2025</div>
+      <p>Served as <strong>Master of Ceremonies</strong> for the GST &amp; Income Tax Awareness Program organized by Rotary Club of JP Nagar.</p>
+    </div>
+    <div class="reel-item">
+      <div class="date">DEC 2025</div>
+      <p>Served as <strong>Master of Ceremonies</strong> for "Aarohan," a fundraising concert organized by Rotary Club of JP Nagar.</p>
+    </div>
+    <div class="reel-item">
+      <div class="date">FEB 22</div>
+      <p>Served as <strong>Master of Ceremonies</strong> for "RISE – Sambhrama," a District 3191 event organized by Rotary Bangalore JP.</p>
+    </div>
+    <div class="reel-item">
+      <div class="date">CLASS XII</div>
+      <p>Captained the school football team and secured <strong>Second Runner-Up</strong> in an inter-school football tournament.</p>
+    </div>
+    <div class="reel-item">
+      <div class="date">₹38,500</div>
+      <p>Participated in <strong>four management fests</strong>, winning three and earning a total cash prize of ₹38,500.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SKILL SET ============ -->
+<section id="skillset">
+  <div class="wrap">
+    <div class="cue"><span class="time mono">00:32</span><span class="rule"></span><span class="label mono">Skill Set</span></div>
+    <h2>Skills</h2>
+    <div class="chips">
+      <span class="chip accent">Public Speaking &amp; Presentation</span>
+      <span class="chip accent">Event Anchoring &amp; MC</span>
+      <span class="chip">Verbal Communication</span>
+      <span class="chip">Leadership &amp; Team Collaboration</span>
+      <span class="chip">Negotiation Skills</span>
+      <span class="chip">Conflict Resolution</span>
+      <span class="chip">Football &amp; Team Sports</span>
+      <span class="chip">Adaptability &amp; Quick Learning</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ OFF STAGE / HOBBIES ============ -->
+<section id="offstage-section">
+  <div class="wrap">
+    <div class="cue"><span class="time mono">00:38</span><span class="rule"></span><span class="label mono">Off Stage</span></div>
+    <h2>Hobbies &amp; Interests</h2>
+    <div class="offstage">
+      <div class="item"><span>01</span>Writing &amp; performing rap music</div>
+      <div class="item"><span>02</span>Sketching &amp; graphite art</div>
+      <div class="item"><span>03</span>Exploring new skills &amp; continuous learning</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CLOSING REMARKS / VISION ============ -->
+<section id="closing">
+  <div class="wrap">
+    <div class="cue"><span class="time mono">00:44</span><span class="rule"></span><span class="label mono">Closing Remarks</span></div>
+    <div class="closing">
+      <p>Entrepreneur by aspiration. Rotaractor by passion. Storyteller by instinct. I build the way I host a stage — with purpose, presence, and people at the center — because leadership means nothing without the community it lifts.</p>
+      <div class="note">— R. TARUN KUMAR</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ END OF SHOW ============ -->
+<footer>
+  END OF SHOW · R TARUN KUMAR · BENGALURU
+</footer>
+
+<!-- ============ LOWER THIRD (fixed broadcast bar) ============ -->
+<div class="lower-third" id="lowerThird">
+  <div class="bar-gold"></div>
+  <div class="bar-main">
+    <div class="who"><b>R. TARUN KUMAR</b>Master of Ceremonies · Rotaractor</div>
+    <div class="lt-links">
+      <a href="https://mail.google.com/mail/?view=cm&fs=1&to=rtarunk15@gmail.com" target="_blank" rel="noopener noreferrer">EMAIL</a>
+      <a href="https://www.linkedin.com/in/r-tarun-kumar" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
+      <a href="https://www.instagram.com/_t4run.k_/" target="_blank" rel="noopener noreferrer">INSTAGRAM</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Reveal the lower-third broadcast bar once the hero has scrolled out of view
+  const hero = document.getElementById('opening');
+  const lowerThird = document.getElementById('lowerThird');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        lowerThird.classList.remove('show');
+      } else {
+        lowerThird.classList.add('show');
+      }
+    });
+  }, { threshold: 0 });
+  observer.observe(hero);
+
+  // If a real profile photo is ever dropped in at the same path, swap the monogram out automatically
+  const img = document.getElementById('profile-photo');
+  img.addEventListener('load', () => {
+    if(img.naturalWidth > 0){
+      img.style.display = 'block';
+      img.previousElementSibling?.style?.setProperty('display','none');
+    }
+  });
+</script>
+
+</body>
+</html>
